@@ -3,8 +3,14 @@
 
 #include <infiniband/verbs.h>
 
+/**
+ * @brief an global object of all related struct of a rdma-NIC device
+ */
 struct IBRes
 {
+    /**
+     * Every device is associated with a unique context
+     */
     struct ibv_context *ctx;
     struct ibv_pd *pd;
     struct ibv_mr *mr;

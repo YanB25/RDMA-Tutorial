@@ -25,23 +25,28 @@ int connect_qp_server()
     check(sockfd > 0, "Failed to create server socket.");
     listen(sockfd, 5);
 
+    log_info("start to accept...");
     peer_sockfd =
         accept(sockfd, (struct sockaddr *) &peer_addr, &peer_addr_len);
     check(peer_sockfd > 0, "Failed to create peer_sockfd");
+    log_info("accepted.");
 
     /* init local qp_info */
     local_qp_info.lid = ib_res.port_attr.lid;
     local_qp_info.qp_num = ib_res.qp->qp_num;
 
     /* get qp_info from client */
+    log_info("get qp_info from client");
     ret = sock_get_qp_info(peer_sockfd, &remote_qp_info);
     check(ret == 0, "Failed to get qp_info from client");
 
     /* send qp_info to client */
+    log_info("send qp_info to client");
     ret = sock_set_qp_info(peer_sockfd, &local_qp_info);
     check(ret == 0, "Failed to send qp_info to client");
 
     /* change send QP state to RTS */
+    log_info("change send QP state to RTS");
     ret =
         modify_qp_to_rts(ib_res.qp, remote_qp_info.qp_num, remote_qp_info.lid);
     check(ret == 0, "Failed to modify qp to rts");
@@ -147,6 +152,13 @@ int setup_ib()
     check(ib_res.ctx != NULL, "Failed to open ib device.");
     log_info("The device %s is opened", ibv_get_device_name(dev_list[0]));
 
+    /* query IB device attr */
+    ret = ibv_query_device(ib_res.ctx, &ib_res.dev_attr);
+    check(ret == 0, "Failed to query device");
+    log_info("dev_attr: max_qp_wr: %d", ib_res.dev_attr.max_qp_wr);
+    log_info("max_mr_size: %llu",
+             (unsigned long long) ib_res.dev_attr.max_mr_size);
+
     /* allocate protection domain */
     ib_res.pd = ibv_alloc_pd(ib_res.ctx);
     check(ib_res.pd != NULL, "Failed to allocate protection domain.");
@@ -154,9 +166,11 @@ int setup_ib()
     /* query IB port attribute */
     ret = ibv_query_port(ib_res.ctx, IB_PORT, &ib_res.port_attr);
     check(ret == 0, "Failed to query IB port information.");
+    log_info("active mtu enum is %d", ib_res.port_attr.active_mtu);
 
     /* register mr */
     ib_res.ib_buf_size = config_info.msg_size * config_info.num_concurr_msgs;
+    // allocate aligned memory
     ib_res.ib_buf = (char *) memalign(4096, ib_res.ib_buf_size);
     check(ib_res.ib_buf != NULL, "Failed to allocate ib_buf");
 
@@ -166,14 +180,6 @@ int setup_ib()
                            IBV_ACCESS_LOCAL_WRITE | IBV_ACCESS_REMOTE_READ |
                                IBV_ACCESS_REMOTE_WRITE);
     check(ib_res.mr != NULL, "Failed to register mr");
-
-    /* query IB device attr */
-    ret = ibv_query_device(ib_res.ctx, &ib_res.dev_attr);
-    check(ret == 0, "Failed to query device");
-    // ib_res.dev_attr.max_qp_wr = 16384;
-    // works
-    ib_res.dev_attr.max_qp_wr = 8192;
-    printf("dev_attr: max_qp_wr: %d\n", ib_res.dev_attr.max_qp_wr);
 
     /* create cq */
     ib_res.cq =
@@ -186,8 +192,18 @@ int setup_ib()
         .recv_cq = ib_res.cq,
         .cap =
             {
-                .max_send_wr = ib_res.dev_attr.max_qp_wr,
-                .max_recv_wr = ib_res.dev_attr.max_qp_wr,
+                /**
+                 * the maximum # of outstanding WR (work request) that
+                 * can be posted to the send queue in the QP
+                 */
+                // .max_send_wr = ib_res.dev_attr.max_qp_wr,
+                // .max_recv_wr = ib_res.dev_attr.max_qp_wr,
+                .max_send_wr = 2048,
+                .max_recv_wr = 2048,
+                /**
+                 * the maximum # of outstanding SGE (Scatter Gather Elements)
+                 * that can be posted to the send queue in the QP
+                 */
                 .max_send_sge = 1,
                 .max_recv_sge = 1,
             },
