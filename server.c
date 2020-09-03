@@ -19,8 +19,8 @@ void *server_thread(void *arg)
     int num_wc = 20;
     bool stop = false;
 
-    pthread_t self;
-    cpu_set_t cpuset;
+    // pthread_t self;
+    // cpu_set_t cpuset;
 
     struct ibv_qp *qp = ib_res.qp;
     struct ibv_cq *cq = ib_res.cq;
@@ -36,11 +36,11 @@ void *server_thread(void *arg)
     double throughput = 0.0;
 
     /* set thread affinity */
-    CPU_ZERO(&cpuset);
-    CPU_SET((int) thread_id, &cpuset);
-    self = pthread_self();
-    ret = pthread_setaffinity_np(self, sizeof(cpu_set_t), &cpuset);
-    check(ret == 0, "thread[%ld]: failed to set thread affinity", thread_id);
+    // CPU_ZERO(&cpuset);
+    // CPU_SET((int) thread_id, &cpuset);
+    // self = pthread_self();
+    // ret = pthread_setaffinity_np(self, sizeof(cpu_set_t), &cpuset);
+    // check(ret == 0, "thread[%ld]: failed to set thread affinity", thread_id);
 
     /* pre-post recvs */
     wc = (struct ibv_wc *) calloc(num_wc, sizeof(struct ibv_wc));
