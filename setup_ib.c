@@ -137,12 +137,15 @@ int setup_ib()
     memset(&ib_res, 0, sizeof(struct IBRes));
 
     /* get IB device list */
-    dev_list = ibv_get_device_list(NULL);
+    int num_device = 0;
+    dev_list = ibv_get_device_list(&num_device);
     check(dev_list != NULL, "Failed to get ib device list.");
+    log_info("Probe %d device(s)", num_device);
 
     /* create IB context */
-    ib_res.ctx = ibv_open_device(*dev_list);
+    ib_res.ctx = ibv_open_device(dev_list[0]);
     check(ib_res.ctx != NULL, "Failed to open ib device.");
+    log_info("The device %s is opened", ibv_get_device_name(dev_list[0]));
 
     /* allocate protection domain */
     ib_res.pd = ibv_alloc_pd(ib_res.ctx);
@@ -167,7 +170,9 @@ int setup_ib()
     /* query IB device attr */
     ret = ibv_query_device(ib_res.ctx, &ib_res.dev_attr);
     check(ret == 0, "Failed to query device");
-    ib_res.dev_attr.max_qp_wr = 1024;
+    // ib_res.dev_attr.max_qp_wr = 16384;
+    // works
+    ib_res.dev_attr.max_qp_wr = 8192;
     printf("dev_attr: max_qp_wr: %d\n", ib_res.dev_attr.max_qp_wr);
 
     /* create cq */
