@@ -47,7 +47,6 @@ void *client_thread_func(void *arg)
     wc = (struct ibv_wc *) calloc(num_wc, sizeof(struct ibv_wc));
     check(wc != NULL, "thread[%ld]: failed to allocate wc", thread_id);
 
-    log_info("client: concurrency = %d", num_concurr_msgs);
     for (i = 0; i < num_concurr_msgs; i++)
     {
         ret = post_recv(msg_size, lkey, (uint64_t) buf_ptr, qp, buf_ptr);
