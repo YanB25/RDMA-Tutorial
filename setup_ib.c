@@ -39,6 +39,7 @@ int connect_qp_server()
     log_info("get qp_info from client");
     ret = sock_get_qp_info(peer_sockfd, &remote_qp_info);
     check(ret == 0, "Failed to get qp_info from client");
+    qpinfo_print(&remote_qp_info);
 
     /* send qp_info to client */
     log_info("send qp_info to client");
@@ -108,6 +109,7 @@ int connect_qp_client()
     log_info("get qp_info from server");
     ret = sock_get_qp_info(peer_sockfd, &remote_qp_info);
     check(ret == 0, "Failed to get qp_info from server");
+    qpinfo_print(&remote_qp_info);
 
     /* change QP state to RTS */
     log_info("change QP state to RTS");

@@ -43,6 +43,8 @@ struct QPInfo
     uint32_t qp_num;
 } __attribute__((packed));
 
+void qpinfo_print(const struct QPInfo *this);
+
 enum MsgType
 {
     MSG_CTL_START = 0,

@@ -120,3 +120,7 @@ int post_recv(uint32_t req_size,
     ret = ibv_post_recv(qp, &recv_wr, &bad_recv_wr);
     return ret;
 }
+void qpinfo_print(const struct QPInfo *this)
+{
+    printf("QPInfo: { lid: %d, qp_num: %d }", this->lid, this->qp_num);
+}
