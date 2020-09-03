@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
     ret = setup_ib();
     check(ret == 0, "Failed to setup IB");
 
+    log_info("Finished setup IB.");
+
     if (config_info.is_server)
     {
         ret = run_server();

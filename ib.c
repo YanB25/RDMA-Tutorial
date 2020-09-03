@@ -122,5 +122,5 @@ int post_recv(uint32_t req_size,
 }
 void qpinfo_print(const struct QPInfo *this)
 {
-    printf("QPInfo: { lid: %d, qp_num: %d }", this->lid, this->qp_num);
+    printf("QPInfo: { lid: %d, qp_num: %d }\n", this->lid, this->qp_num);
 }
