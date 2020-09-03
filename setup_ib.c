@@ -215,6 +215,8 @@ int setup_ib()
                 .max_recv_sge = 1,
             },
         .qp_type = IBV_QPT_RC,
+        // user must decide whether or not WC should be generated
+        .sq_sig_all = 0,
     };
 
     ib_res.qp = ibv_create_qp(ib_res.pd, &qp_init_attr);

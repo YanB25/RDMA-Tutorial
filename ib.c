@@ -85,18 +85,21 @@ int post_send(uint32_t req_size,
               struct ibv_qp *qp,
               char *buf)
 {
+    static uint64_t __count = 0;
+    __count++;
     int ret = 0;
     struct ibv_send_wr *bad_send_wr;
 
     struct ibv_sge list = {
         .addr = (uintptr_t) buf, .length = req_size, .lkey = lkey};
 
-    struct ibv_send_wr send_wr = {.wr_id = wr_id,
-                                  .sg_list = &list,
-                                  .num_sge = 1,
-                                  .opcode = IBV_WR_SEND_WITH_IMM,
-                                  .send_flags = IBV_SEND_SIGNALED,
-                                  .imm_data = htonl(imm_data)};
+    struct ibv_send_wr send_wr = {
+        .wr_id = wr_id,
+        .sg_list = &list,
+        .num_sge = 1,
+        .opcode = IBV_WR_SEND_WITH_IMM,
+        .send_flags = (__count & 0b10000) ? IBV_SEND_SIGNALED : 0,
+        .imm_data = htonl(imm_data)};
 
     ret = ibv_post_send(qp, &send_wr, &bad_send_wr);
     return ret;
