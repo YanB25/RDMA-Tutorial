@@ -90,22 +90,27 @@ int connect_qp_client()
 
     struct QPInfo local_qp_info, remote_qp_info;
 
+    log_info("sock create connecting...");
     peer_sockfd =
         sock_create_connect(config_info.server_name, config_info.sock_port);
     check(peer_sockfd > 0, "Failed to create peer_sockfd");
+    log_info("connected.");
 
     local_qp_info.lid = ib_res.port_attr.lid;
     local_qp_info.qp_num = ib_res.qp->qp_num;
 
     /* send qp_info to server */
+    log_info("send qp_info to server");
     ret = sock_set_qp_info(peer_sockfd, &local_qp_info);
     check(ret == 0, "Failed to send qp_info to server");
 
     /* get qp_info from server */
+    log_info("get qp_info from server");
     ret = sock_get_qp_info(peer_sockfd, &remote_qp_info);
     check(ret == 0, "Failed to get qp_info from server");
 
     /* change QP state to RTS */
+    log_info("change QP state to RTS");
     ret =
         modify_qp_to_rts(ib_res.qp, remote_qp_info.qp_num, remote_qp_info.lid);
     check(ret == 0, "Failed to modify qp to rts");
