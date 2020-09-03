@@ -1,4 +1,8 @@
 # RDMA-Tutorial
+This project is a rewrite version of [This Tutorial repo](https://github.com/jcxue/RDMA-Tutorial).
+
+This repo is runnable and add more detail output for tuning and trying rdma.
+
 This project presents an example based tutorial on RDMA based programming. A more detailed 
 discussion can be found on the [Wiki](https://github.com/jcxue/RDMA-Tutorial/wiki) page.
 
