@@ -98,7 +98,7 @@ int post_send(uint32_t req_size,
         .sg_list = &list,
         .num_sge = 1,
         .opcode = IBV_WR_SEND_WITH_IMM,
-        .send_flags = (__count & 0b10000) ? IBV_SEND_SIGNALED : 0,
+        .send_flags = (__count & 0b100000000) ? IBV_SEND_SIGNALED : 0,
         .imm_data = htonl(imm_data)};
 
     ret = ibv_post_send(qp, &send_wr, &bad_send_wr);
