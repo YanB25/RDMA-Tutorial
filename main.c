@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     }
 
     config_info.msg_size = 64;
-    config_info.num_concurr_msgs = 1;
+    config_info.num_concurr_msgs = 2;
 
     ret = init_env();
     check(ret == 0, "Failed to init env");
