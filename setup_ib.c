@@ -214,8 +214,7 @@ int setup_ib()
                 .max_send_sge = 1,
                 .max_recv_sge = 1,
             },
-        // .qp_type = IBV_QPT_RC,
-        .qp_type = IBV_QPT_UD,
+        .qp_type = IBV_QPT_RC,
     };
 
     ib_res.qp = ibv_create_qp(ib_res.pd, &qp_init_attr);
