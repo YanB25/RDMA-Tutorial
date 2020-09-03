@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    config_info.msg_size = 1;
+    config_info.msg_size = 64;
     config_info.num_concurr_msgs = 1;
 
     ret = init_env();
