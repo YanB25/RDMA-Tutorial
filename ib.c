@@ -102,8 +102,6 @@ int post_send(uint32_t req_size,
         .imm_data = htonl(imm_data)};
 
     ret = ibv_post_send(qp, &send_wr, &bad_send_wr);
-    check(bad_send_wr == NULL || (bad_send_wr->num_sge != 0),
-          "Failed to ibv_post_send.");
     if (ret != 0)
     {
         if (ret == EINVAL)
@@ -123,8 +121,6 @@ int post_send(uint32_t req_size,
             fprintf(stderr, "ret is %d\n", ret);
         }
     }
-    return ret;
-error:
     return ret;
 }
 
