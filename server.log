@@ -12,5 +12,9 @@ sock_port                 = 11111
 ************ End of Configuraion ************
 
 
-================ Run Finished ================
+************ Start of IB Config ************
+
+	qp[243913] <-> qp[221311]
+
+************ End of IB Config ************
 
