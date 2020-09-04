@@ -102,13 +102,9 @@ int post_send(uint32_t req_size,
         .imm_data = htonl(imm_data)};
 
     ret = ibv_post_send(qp, &send_wr, &bad_send_wr);
-    if (bad_send_wr != NULL)
-    {
-        log_warn("ibv_post_send failed for @%p, for length %lu, lkey = %d",
-                 (void *) bad_send_wr->sg_list->addr,
-                 (unsigned long) bad_send_wr->sg_list->length,
-                 bad_send_wr->sg_list->lkey);
-    }
+    check(bad_send_wr == NULL, "Failed to ibv_post_send.");
+    return ret;
+error:
     return ret;
 }
 
