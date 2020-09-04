@@ -43,9 +43,11 @@ void *server_thread(void *arg)
     // check(ret == 0, "thread[%ld]: failed to set thread affinity", thread_id);
 
     /* pre-post recvs */
+    log_info("server_thread run.");
     wc = (struct ibv_wc *) calloc(num_wc, sizeof(struct ibv_wc));
     check(wc != NULL, "thread[%ld]: failed to allocate wc", thread_id);
 
+    log_info("server: preparing num_concurr of post_recvs");
     for (i = 0; i < num_concurr_msgs; i++)
     {
         ret = post_recv(msg_size, lkey, (uint64_t) buf_ptr, qp, buf_ptr);
@@ -54,12 +56,14 @@ void *server_thread(void *arg)
         buf_ptr += buf_offset;
     }
 
+    log_info("server: signal client to start");
     /* signal the client to start */
     ret = post_send(0, lkey, 0, MSG_CTL_START, qp, buf_ptr);
     check(ret == 0,
           "thread[%ld]: failed to signal the client to start",
           thread_id);
 
+    log_info("server: start polling...");
     while (stop != true)
     {
         /* poll cq */
