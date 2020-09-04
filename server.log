@@ -1,0 +1,24 @@
+
+================ IB Echo Server ================
+
+
+************ Configuraion ************
+
+is_server                 = true
+msg_size                  = 64
+num_concurr_msgs          = 2
+sock_port                 = 11111
+
+************ End of Configuraion ************
+
+
+************ Start of IB Config ************
+
+	qp[243915] <-> qp[221313]
+
+************ End of IB Config ************
+
+server_thread[0]: failed to execute
+
+================ Run Finished ================
+

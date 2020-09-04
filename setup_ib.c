@@ -160,6 +160,7 @@ int setup_ib()
                                IBV_ACCESS_REMOTE_READ |
                                IBV_ACCESS_REMOTE_WRITE);
     check(ib_res.mr != NULL, "Failed to register mr");
+    log_info("register MR: %p - %p", ib_res.ib_buf, ib_res.ib_buf + ib_res.ib_buf_size);
 
     /* query IB device attr */
     ret = ibv_query_device(ib_res.ctx, &ib_res.dev_attr);
