@@ -103,17 +103,24 @@ int post_send(uint32_t req_size,
 
     ret = ibv_post_send(qp, &send_wr, &bad_send_wr);
     check(bad_send_wr == NULL, "Failed to ibv_post_send.");
-    if (ret == EINVAL)
+    if (ret != 0)
     {
-        fprintf(stderr, "EINVAL\n");
-    }
-    else if (ret == ENOMEM)
-    {
-        fprintf(stderr, "ENOMEM\n");
-    }
-    else if (ret == EFAULT)
-    {
-        fprintf(stderr, "EFAULT\n");
+        if (ret == EINVAL)
+        {
+            fprintf(stderr, "EINVAL\n");
+        }
+        else if (ret == ENOMEM)
+        {
+            fprintf(stderr, "ENOMEM\n");
+        }
+        else if (ret == EFAULT)
+        {
+            fprintf(stderr, "EFAULT\n");
+        }
+        else
+        {
+            fprintf(stderr, "ret is %d\n", ret);
+        }
     }
     return ret;
 error:
