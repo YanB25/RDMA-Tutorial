@@ -1,0 +1,20 @@
+
+================ IB Echo Server ================
+
+
+************ Configuraion ************
+
+is_server                 = true
+msg_size                  = 64
+num_concurr_msgs          = 2
+sock_port                 = 11111
+
+************ End of Configuraion ************
+
+
+************ Start of IB Config ************
+
+	qp[243918] <-> qp[221316]
+
+************ End of IB Config ************
+

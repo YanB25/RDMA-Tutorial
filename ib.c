@@ -79,7 +79,7 @@ int post_send(uint32_t req_size, uint32_t lkey, uint64_t wr_id,
     int ret = 0;
     struct ibv_send_wr *bad_send_wr = NULL;
 
-    log_info("send: sg_list.addr = %p\n", buf);
+    // log_info("send: sg_list.addr = %p\n", buf);
     struct ibv_sge list = {
         .addr = (uintptr_t)buf,
         .length = req_size,
@@ -111,7 +111,7 @@ int post_recv(uint32_t req_size, uint32_t lkey, uint64_t wr_id,
     int ret = 0;
     struct ibv_recv_wr *bad_recv_wr;
 
-    log_info("recv: sg_list.addr = %p\n", buf);
+    // log_info("recv: sg_list.addr = %p\n", buf);
 
     struct ibv_sge list = {
         .addr = (uintptr_t)buf,
