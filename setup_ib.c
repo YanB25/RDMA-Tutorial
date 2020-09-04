@@ -176,7 +176,8 @@ int setup_ib()
     log_info("active mtu enum is %d", ib_res.port_attr.active_mtu);
 
     /* register mr */
-    ib_res.ib_buf_size = config_info.msg_size * config_info.num_concurr_msgs;
+    ib_res.ib_buf_size =
+        10 * config_info.msg_size * config_info.num_concurr_msgs + 1024;
     // allocate aligned memory
     ib_res.ib_buf = (char *) memalign(4096, ib_res.ib_buf_size);
     check(ib_res.ib_buf != NULL, "Failed to allocate ib_buf");
